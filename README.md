@@ -35,6 +35,20 @@ npm run build
 
 这将在 `dist` 目录中生成生产就绪的文件。
 
+### 部署到GitHub Pages
+
+1. 首先修改`package.json`中的`homepage`字段，将其设置为你的GitHub Pages URL:
+```
+"homepage": "https://你的用户名.github.io/仓库名"
+```
+
+2. 然后运行以下命令部署到GitHub Pages:
+```bash
+npm run deploy
+```
+
+这将自动构建项目并将`dist`目录部署到GitHub Pages。
+
 ## 项目结构
 
 ```

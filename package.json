@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "React项目模板（使用Webpack构建）",
   "main": "index.js",
+  "homepage": "https://zacharyzhang1208.github.io/29.10.2025---Project",
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -25,6 +28,7 @@
     "@babel/preset-react": "^7.22.5",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.8.1",
+    "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.5.3",
     "style-loader": "^3.3.3",
     "webpack": "^5.88.0",
