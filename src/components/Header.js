@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Header() {
   return (
@@ -6,8 +7,8 @@ function Header() {
       <h1>普惠农业 Project</h1>
       <nav>
         <ul>
-          <li><a href="#">首页</a></li>
-          <li><a href="#">关于</a></li>
+          <li><Link to="/">首页</Link></li>
+          <li><Link to="/about">关于</Link></li>
           <li><a href="#">联系我们</a></li>
         </ul>
       </nav>
