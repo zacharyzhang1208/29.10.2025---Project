@@ -5,6 +5,7 @@ function QnA() {
   const [answerBlocks, setAnswerBlocks] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [history, setHistory] = useState([]);
+  const [voiceDemo, setVoiceDemo] = useState({ show: false, step: 'idle' });
   const baseSuggestions = [
     '今年小麦补贴政策是什么？',
     '玉米价格趋势如何？',
@@ -37,6 +38,17 @@ function QnA() {
     setAnswerBlocks(blocks);
     setExpanded(true);
     setHistory((prev) => [q, ...prev].slice(0, 10));
+  };
+
+  const handleVoiceDemo = () => {
+    setVoiceDemo({ show: true, step: 'listening' });
+    setTimeout(() => setVoiceDemo({ show: true, step: 'processing' }), 1200);
+    setTimeout(() => {
+      const sample = '请问近期玉米价格趋势如何？';
+      setQuestion(sample);
+      setVoiceDemo({ show: false, step: 'done' });
+      setTimeout(handleAsk, 50);
+    }, 2200);
   };
 
   const useFromHistory = (q) => {
@@ -83,7 +95,13 @@ function QnA() {
               className="search-input"
             />
             <button className="search-button" onClick={handleAsk}>提问</button>
+            <button className="voice-button" onClick={handleVoiceDemo} aria-label="语音提问" title="语音提问"><span className="voice-icon" /></button>
           </div>
+          {voiceDemo.show && (
+            <div className="voice-demo" aria-live="polite" style={{ marginTop: '8px' }}>
+              <span className="voice-dot" />{voiceDemo.step === 'listening' ? '语音识别中…' : '处理中…'}
+            </div>
+          )}
           <div className="qna-suggestions" aria-label="提问建议" style={{ marginTop: '10px' }}>
             {suggestions.map((s, i) => (
               <button key={i} className="qna-chip" onClick={() => useFromHistory(s)}>{s}</button>
