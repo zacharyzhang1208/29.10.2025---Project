@@ -85,8 +85,7 @@ function PricePrediction(){
     }
   };
 
-  const applyFilters = ()=>{ console.log('Apply filters:', {category,region,horizon}); };
-  const resetFilters = ()=>{ setCategory(''); setRegion(''); setHorizon(''); };
+  
 
   return (
     <main className="content pred-page">
@@ -114,10 +113,7 @@ function PricePrediction(){
             {HORIZON_OPTIONS.map(opt=> <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
         </div>
-        <div className="pred-actions">
-          <button className="search-button" onClick={applyFilters} disabled={!region || !horizon}>应用筛选</button>
-          <button className="qna-clear" onClick={resetFilters}>重置</button>
-        </div>
+        
       </div>
 
       {/* 当前市场价格表格 */}
