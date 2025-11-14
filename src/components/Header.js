@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 function Header() {
   return (
     <header className="header">
-      <h1>普惠农业 Project</h1>
-      <nav>
+      <nav className="nav">
         <ul>
-          <li><Link to="/">首页</Link></li>
-          <li><Link to="/about">关于</Link></li>
-          <li><a href="#">联系我们</a></li>
+          <li><Link to="/qna">智能问答</Link></li>
+          <li><Link to="/prediction">价格预测</Link></li>
+          <li><Link to="/policy">政策建议</Link></li>
         </ul>
+        <div className="nav-title">惠普农业</div>
       </nav>
     </header>
   );

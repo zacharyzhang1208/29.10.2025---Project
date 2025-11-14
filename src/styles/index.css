@@ -23,6 +23,13 @@ body {
   color: white;
 }
 
+/* 调整导航为左右分布 */
+.header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .header h1 {
   margin-bottom: 1rem;
 }
@@ -43,6 +50,14 @@ body {
 
 .header nav ul li a:hover {
   text-decoration: underline;
+}
+
+/* 右侧标题样式 */
+.header .nav-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+  opacity: 0.95;
 }
 
 .content {
@@ -95,4 +110,331 @@ body {
   color: white;
   text-align: center;
   padding: 1rem;
+}
+
+.answer-container {
+  margin-top: 16px;
+}
+
+.qna-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start; /* 顶部对齐，避免卡片拉伸占满 */
+}
+
+/* 通用布局与导航 */
+.qna-grid {
+  display: grid;
+  grid-template-columns: 1fr 4fr; /* 左1/5，右4/5 */
+  gap: 24px;
+  align-items: start;
+}
+
+/* QnA 页面专用：收紧左右边距 */
+.qna-page {
+  padding: 12px; /* 原 content 可能较大，缩窄到 12px */
+  margin: 0;     /* 去除居中导致的左右留白 */
+  max-width: none; /* 允许占满可用宽度 */
+}
+
+/* 左右两栏布局 */
+.qna-grid {
+  display: grid;
+  grid-template-columns: 1fr 4fr; /* 左 1/5，右 4/5 */
+  gap: 16px; /* 原 24px，缩窄卡片间距 */
+  align-items: start;
+}
+
+/* 卡片基础样式（缩窄内边距） */
+.qna-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  padding: 12px; /* 原 16px，缩窄 */
+}
+
+/* 历史卡片与主卡片头部 */
+.qna-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px; /* 原 12px，缩窄 */
+}
+
+/* 输入行宽度与间距微调 */
+.qna-main-card .qna-input-row {
+  display: flex;
+  gap: 10px; /* 原 12px，缩窄 */
+  max-width: 880px;
+}
+
+/* 回答区域展开动画（保留） */
+.qna-answer {
+  margin-top: 10px; /* 原 12px，缩窄 */
+  transform-origin: top;
+  will-change: transform, opacity, max-height;
+  max-height: 0;
+  opacity: 0;
+  transform: scaleY(0.98) translateY(-8px);
+  transition: max-height 420ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              opacity 320ms ease,
+              transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.qna-answer.expanded {
+  max-height: 1600px;
+  opacity: 1;
+  transform: scaleY(1) translateY(0);
+}
+.answer-content {
+  padding: 8px 10px; /* 原 10px 12px，略缩窄 */
+}
+.answer-title {
+  font-weight: 600;
+  margin-bottom: 6px; /* 原 8px，缩窄 */
+}
+.answer-section {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.qna-answer.expanded .answer-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 历史列表样式（保留） */
+.qna-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.qna-history-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px; /* 原 10px 12px，缩窄 */
+  border-radius: 6px;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+.qna-history-item:hover {
+  background: #f3f3f3;
+}
+
+/* 响应式：窄屏保持合理间距 */
+@media (max-width: 900px) {
+  .qna-grid {
+    grid-template-columns: 1fr; /* 堆叠显示 */
+    gap: 12px; /* 更紧凑 */
+  }
+  .qna-page {
+    padding: 10px; /* 窄屏进一步缩窄边距 */
+  }
+}
+.qna-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.qna-input-row {
+  display: flex;
+  max-width: 680px;
+}
+
+/* 回答区域使用更平滑的展开动画（替代原 answer-card） */
+.qna-answer {
+  overflow: hidden;
+  max-height: 0; /* 初始折叠 */
+  opacity: 0;
+  transform: translateY(-6px) scaleY(0.98);
+  transform-origin: top;
+  will-change: transform, opacity, max-height;
+  transition:
+    max-height 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 360ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 16px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.qna-answer.expanded {
+  max-height: 1200px; /* 足够显示较多内容 */
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+}
+
+/* 段落级联动画选择器与样式 */
+.qna-answer .answer-section {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 280ms ease, transform 280ms ease;
+}
+.qna-answer.expanded .answer-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+.answer-section {
+  margin: 8px 0;
+  color: #333;
+}
+
+/* 价格预测：筛选栏样式 */
+.pred-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: center;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.filter-group label {
+  font-size: 0.95rem;
+  color: #555;
+}
+.pred-select {
+  min-width: 160px;
+  padding: 8px 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  background: #fff;
+}
+.pred-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto; /* 将操作按钮推到右侧 */
+}
+.pred-actions .search-button {
+  border-radius: 6px;
+}
+.qna-clear {
+  border: 1px solid #ddd;
+  background: #f8f8f8;
+  color: #333;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.qna-clear:hover { background: #f0f0f0; }
+
+@media (max-width: 800px) {
+  .pred-actions { margin-left: 0; }
+}
+
+/* PricePrediction 页面专用：收紧左右边距，与 QnA 一致 */
+.pred-page {
+  padding: 12px;
+  margin: 0;
+  max-width: none;
+}
+
+/* 当前市场价格：表格样式 */
+.pred-table { margin-top: 16px; background: #fff; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.08); padding: 12px; }
+.pred-table-header { display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+.pred-table-header h3 { margin: 0; font-size: 16px; color: #222; }
+.pred-chart-note { font-size: 12px; color: #666; }
+.table-wrapper { overflow-x: auto; margin-top: 8px; }
+.market-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.market-table thead th { text-align: left; color: #333; font-weight: 600; padding: 10px 8px; background: #f7f7f9; border-bottom: 1px solid rgba(0,0,0,0.08); }
+.market-table tbody td { padding: 10px 8px; border-bottom: 1px solid rgba(0,0,0,0.06); color: #222; }
+.market-table tbody tr:hover { background: #fafafa; }
+.market-table tbody tr.is-highlight { background: rgba(72,115,255,0.08); }
+.market-table td.up { color: #0a8f3a; font-weight: 600; }
+.market-table td.down { color: #c62828; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .pred-table { padding: 10px; }
+  .market-table { font-size: 13px; }
+  .market-table thead th, .market-table tbody td { padding: 8px 6px; }
+  .pred-table-header { flex-wrap: wrap; gap: 6px; }
+}
+.pred-chart {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  background: #fff;
+}
+.pred-chart-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pred-chart-header h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.pred-chart-note { color: #777; font-size: 0.9rem; }
+
+.pred-bars {
+  height: 240px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+.pred-bar {
+  flex: 1;
+  min-width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.pred-bar-body {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  background: #4CAF50; /* 默认上涨色 */
+  box-shadow: inset 0 -4px 8px rgba(0,0,0,0.06);
+}
+.pred-bar.up .pred-bar-body { background: #4CAF50; }
+.pred-bar.down .pred-bar-body { background: #e74c3c; }
+.pred-bar.highlight .pred-bar-body { outline: 2px solid #222; }
+
+.pred-bar-value {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+.pred-bar-label {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.pred-chart-legend {
+  margin-top: 8px;
+  display: flex;
+  gap: 12px;
+  color: #666;
+}
+.pred-chart-legend .legend-up::before {
+  content: "";
+  display: inline-block;
+  width: 12px; height: 12px; margin-right: 6px;
+  background: #4CAF50; border-radius: 2px;
+}
+.pred-chart-legend .legend-down::before {
+  content: "";
+  display: inline-block;
+  width: 12px; height: 12px; margin-right: 6px;
+  background: #e74c3c; border-radius: 2px;
+}
+.pred-chart-legend .legend-highlight::before {
+  content: "";
+  display: inline-block;
+  width: 12px; height: 12px; margin-right: 6px;
+  background: #ddd; border: 2px solid #222; border-radius: 2px;
+}
+
+@media (max-width: 800px) {
+  .pred-bars { gap: 8px; height: 200px; }
+  .pred-bar { min-width: 48px; }
 }
