@@ -52,6 +52,18 @@ function makeMockSeries(category, region, horizon){
   return out;
 }
 
+function makeRegionCompare(category, region){
+  if (!category) return [];
+  const regions = REGION_OPTIONS;
+  const current = REGION_MULT[region] ? region : '全国';
+  return regions.map(r => {
+    const base = BASE_PRICES[category] * (REGION_MULT[r] || 1);
+    const jitter = (Math.random()*0.04)-0.02;
+    const price = +(base*(1+jitter)).toFixed(2);
+    return { region: r, price, highlight: r===current };
+  });
+}
+
 function PricePrediction(){
   const [category, setCategory] = useState('');
   const [region, setRegion] = useState('');
@@ -62,6 +74,7 @@ function PricePrediction(){
   const chartRef = useRef(null);
   const effectiveHorizon = horizon || '1m';
   const series = useMemo(()=>makeMockSeries(category, region, effectiveHorizon),[category,region,effectiveHorizon]);
+  const regionCompare = useMemo(()=>makeRegionCompare(category, region),[category,region]);
 
   const handleRowClick = (name) => {
     setCategory(name);
@@ -146,50 +159,106 @@ function PricePrediction(){
         </div>
       </section>
 
-      <section ref={chartRef} className="pred-chart" aria-label="价格预测趋势图">
-        <div className="pred-chart-header">
-          <h3>{category || '请选择品类'}价格趋势</h3>
-          <span className="pred-chart-note">地区：{region || '全国'}｜时间：{HORIZON_OPTIONS.find(o=>o.value===effectiveHorizon)?.label}</span>
-        </div>
-        {category ? (
-          <svg width="100%" height="260" viewBox="0 0 700 260" preserveAspectRatio="none" role="img">
-            <rect x="0" y="0" width="700" height="260" fill="#ffffff" stroke="#e6e6e6" />
-            {(() => {
-              if (!series.length) return null;
-              const values = series.map(s => s.value);
-              const minV = Math.min(...values);
-              const maxV = Math.max(...values);
-              const pad = 28;
-              const w = 700 - pad*2;
-              const h = 220;
-              const toX = (i) => pad + (i/(series.length-1))*w;
-              const toY = (v) => pad + (1 - (v - minV)/(maxV - minV || 1)) * h;
-              const d = series.map((s,i)=>`${i===0?'M':'L'}${toX(i)},${toY(s.value)}`).join(' ');
-              return (
-                <g>
-                  <g stroke="#f0f0f0">
-                    {[0,1,2,3].map(i=> <line key={i} x1={pad} x2={pad+w} y1={pad + (h/3)*i} y2={pad + (h/3)*i} />)}
-                  </g>
-                  <path d={d} fill="none" stroke="#4873ff" strokeWidth="2.5" />
-                  {series.map((s,i)=> (
-                    <g key={i}>
-                      <circle cx={toX(i)} cy={toY(s.value)} r="3.5" fill="#4873ff" />
-                      {i%Math.ceil(series.length/6)===0 && (
-                        <text x={toX(i)} y={240} fontSize="10" textAnchor="middle" fill="#777">{s.label}</text>
-                      )}
-                    </g>
-                  ))}
-                  <text x={pad} y={18} fontSize="12" fill="#555">价格区间：{minV.toFixed(2)}~{maxV.toFixed(2)} 元/公斤</text>
-                </g>
-              );
-            })()}
-          </svg>
-        ) : (
-          <div className="search-results" style={{ marginTop: '8px' }}>
-            <p style={{ color: '#666' }}>点击上方表格中的品类，或在筛选栏选择一个产品与时间范围，显示该产品的价格趋势。</p>
+      <div className="pred-charts-row">
+        <section ref={chartRef} className="pred-chart" aria-label="价格预测趋势图">
+          <div className="pred-chart-header">
+            <h3>{category || '请选择品类'}价格趋势</h3>
+            <span className="pred-chart-note">地区：{region || '全国'}｜时间：{HORIZON_OPTIONS.find(o=>o.value===effectiveHorizon)?.label}</span>
           </div>
-        )}
-      </section>
+          {category ? (
+            <div style={{ position: 'relative', width: '100%', paddingBottom: '56%' }}>
+              <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet" role="img" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <rect x="0" y="0" width="800" height="400" fill="#ffffff" stroke="#e6e6e6" />
+                {(() => {
+                  if (!series.length) return null;
+                  const values = series.map(s => s.value);
+                  const minV = Math.min(...values);
+                  const maxV = Math.max(...values);
+                  const pad = 40;
+                  const w = 800 - pad*2;
+                  const h = 320;
+                  const toX = (i) => pad + (i/(series.length-1))*w;
+                  const toY = (v) => pad + (1 - (v - minV)/(maxV - minV || 1)) * h;
+                  const d = series.map((s,i)=>`${i===0?'M':'L'}${toX(i)},${toY(s.value)}`).join(' ');
+                  return (
+                    <g>
+                      <g stroke="#f0f0f0">
+                        {[0,1,2,3,4].map(i=> <line key={i} x1={pad} x2={pad+w} y1={pad + (h/4)*i} y2={pad + (h/4)*i} />)}
+                      </g>
+                      <path d={d} fill="none" stroke="#4873ff" strokeWidth="2.5" />
+                      {series.map((s,i)=> (
+                        <g key={i}>
+                          <circle cx={toX(i)} cy={toY(s.value)} r="3.5" fill="#4873ff" />
+                          {i%Math.ceil(series.length/6)===0 && (
+                            <text x={toX(i)} y={pad + h + 20} fontSize="10" textAnchor="middle" fill="#777">{s.label}</text>
+                          )}
+                        </g>
+                      ))}
+                      <text x={pad} y={22} fontSize="12" fill="#555">价格区间：{minV.toFixed(2)}~{maxV.toFixed(2)} 元/公斤</text>
+                    </g>
+                  );
+                })()}
+              </svg>
+            </div>
+          ) : (
+            <div className="search-results" style={{ marginTop: '8px' }}>
+              <p style={{ color: '#666' }}>点击上方表格中的品类，或在筛选栏选择一个产品与时间范围，显示该产品的价格趋势。</p>
+            </div>
+          )}
+        </section>
+
+        <section className="pred-chart" aria-label="地区价格差异对比图">
+          <div className="pred-chart-header">
+            <h3>地区价格差异</h3>
+            <span className="pred-chart-note">品类：{category || '未选择'}</span>
+          </div>
+          {category ? (
+            <div style={{ position: 'relative', width: '100%', paddingBottom: '56%' }}>
+              <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet" role="img" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <rect x="0" y="0" width="800" height="400" fill="#ffffff" stroke="#e6e6e6" />
+                {(() => {
+                  if (!regionCompare.length) return null;
+                  const values = regionCompare.map(s => s.price);
+                  const minV = Math.min(...values);
+                  const maxV = Math.max(...values);
+                  const pad = 40;
+                  const w = 800 - pad*2;
+                  const h = 320;
+                  const gap = 10;
+                  const bw = (w / regionCompare.length) - gap;
+                  return (
+                    <g>
+                      <g stroke="#f0f0f0">
+                        {[0,1,2,3,4].map(i=> <line key={i} x1={pad} x2={pad+w} y1={pad + (h/4)*i} y2={pad + (h/4)*i} />)}
+                      </g>
+                      {regionCompare.map((s,i)=>{
+                        const x = pad + i*(bw+gap);
+                        const ratio = (s.price - minV)/(maxV - minV || 1);
+                        const bh = ratio * h;
+                        const y = pad + (h - bh);
+                        const fill = s.highlight ? '#e74c3c' : '#4873ff';
+                        const stroke = s.highlight ? '#222' : 'none';
+                        return (
+                          <g key={i}>
+                            <rect x={x} y={y} width={bw} height={bh} fill={fill} stroke={stroke} />
+                            <text x={x + bw/2} y={pad + h + 20} fontSize="10" textAnchor="middle" fill="#777">{s.region}</text>
+                            <text x={x + bw/2} y={y - 6} fontSize="10" textAnchor="middle" fill="#555">{s.price}</text>
+                          </g>
+                        );
+                      })}
+                      <text x={pad} y={22} fontSize="12" fill="#555">区间：{minV.toFixed(2)}~{maxV.toFixed(2)} 元/公斤</text>
+                    </g>
+                  );
+                })()}
+              </svg>
+            </div>
+          ) : (
+            <div className="search-results" style={{ marginTop: '8px' }}>
+              <p style={{ color: '#666' }}>选择一个品类后，查看不同地区的价格差异。</p>
+            </div>
+          )}
+        </section>
+      </div>
     </main>
   );
 }

@@ -362,6 +362,7 @@ body {
   border-radius: 10px;
   background: #fff;
 }
+.pred-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
 .pred-chart-header {
   display: flex;
   align-items: baseline;
@@ -437,4 +438,5 @@ body {
 @media (max-width: 800px) {
   .pred-bars { gap: 8px; height: 200px; }
   .pred-bar { min-width: 48px; }
+  .pred-charts-row { grid-template-columns: 1fr; }
 }
