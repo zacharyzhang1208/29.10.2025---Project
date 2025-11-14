@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { getBasename } from './utils/routerBase';
 import Header from './components/Header';
 import Content from './components/Content';
 import Footer from './components/Footer';
@@ -9,8 +10,9 @@ import PricePrediction from './components/PricePrediction';
 import PolicyAdvice from './components/PolicyAdvice';
 
 function App() {
+  const basename = getBasename();
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <div className="app">
         <Header />
         <Routes>
