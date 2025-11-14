@@ -124,6 +124,12 @@ function PricePrediction(){
         </div>
         <div className="table-wrapper">
           <table className="market-table">
+            <colgroup>
+              <col style={{ width: '32%' }} />
+              <col style={{ width: '18%' }} />
+              <col style={{ width: '18%' }} />
+              <col style={{ width: '32%' }} />
+            </colgroup>
             <thead>
               <tr>
                 <th>品类</th>
