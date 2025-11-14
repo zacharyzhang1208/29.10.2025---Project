@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 function QnA() {
   const [question, setQuestion] = useState('');
   const [answerBlocks, setAnswerBlocks] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [history, setHistory] = useState([]);
+  const baseSuggestions = [
+    '今年小麦补贴政策是什么？',
+    '玉米价格趋势如何？',
+    '蔬菜近期市场价格有没有波动？',
+    '水稻收购价与成本的关系？',
+    '生猪价格未来一个月走势预测？'
+  ];
+  const suggestions = useMemo(() => {
+    const uniq = [];
+    [...history.slice(0, 5), ...baseSuggestions].forEach(s => { if (!uniq.includes(s)) uniq.push(s); });
+    return uniq.slice(0, 8);
+  }, [history]);
 
   const makeFakeAnswer = (q) => {
     const topic = (q || '').trim() || '示例问题';
@@ -45,7 +57,6 @@ function QnA() {
         <section className="qna-card qna-history-card" aria-label="提问历史">
           <div className="qna-card-header">
             <h3>提问历史</h3>
-            <button className="qna-clear" onClick={clearHistory} title="清空历史">清空</button>
           </div>
           {history.length === 0 ? (
             <div className="qna-history-empty">暂无历史记录</div>
@@ -72,6 +83,11 @@ function QnA() {
               className="search-input"
             />
             <button className="search-button" onClick={handleAsk}>提问</button>
+          </div>
+          <div className="qna-suggestions" aria-label="提问建议" style={{ marginTop: '10px' }}>
+            {suggestions.map((s, i) => (
+              <button key={i} className="qna-chip" onClick={() => useFromHistory(s)}>{s}</button>
+            ))}
           </div>
 
           <div className={`qna-answer ${hasAnswer && expanded ? 'expanded' : ''}`}>
