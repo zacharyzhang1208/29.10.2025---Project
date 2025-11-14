@@ -14,14 +14,16 @@ function Content() {
         <h2>普惠农业 Project 智能 Agent</h2>
         
         <div className="search-container">
-          <input
-            type="text"
-            placeholder="请输入您的问题..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="search-input"
-          />
-          <button className="search-button">问Agent</button>
+          <div className="input-with-icon" style={{ flex: 1 }}>
+            <input
+              type="text"
+              placeholder="请输入您的问题..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="search-input"
+            />
+          </div>
+          <button className="search-button icon-search">搜索</button>
         </div>
         
         {searchTerm && (

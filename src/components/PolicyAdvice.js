@@ -61,33 +61,34 @@ function PolicyAdvice() {
         <section className="policy-content" aria-label="政策建议内容">
           <div className="policy-panel">
             <div className="policy-filter-bar" style={{ marginTop: '4px' }}>
-              <div className="filter-group">
-                <label htmlFor="policy-date">日期</label>
-                <select id="policy-date" className="policy-select" value={date} onChange={(e)=>setDate(e.target.value)}>
-                  <option value="" disabled>选择日期范围</option>
-                  {DATE_OPTIONS.map(opt=> <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                </select>
+              <div className="policy-filter-left">
+                <div className="filter-group">
+                  <label htmlFor="policy-date">日期</label>
+                  <select id="policy-date" className="policy-select" value={date} onChange={(e)=>setDate(e.target.value)}>
+                    <option value="" disabled>选择日期范围</option>
+                    {DATE_OPTIONS.map(opt=> <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                  </select>
+                </div>
+                <div className="filter-group">
+                  <label htmlFor="policy-crop">作物种类</label>
+                  <select id="policy-crop" className="policy-select" value={crop} onChange={(e)=>setCrop(e.target.value)}>
+                    <option value="" disabled>选择作物</option>
+                    {CROP_OPTIONS.map(opt=> <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                </div>
+                <div className="filter-group">
+                  <label htmlFor="policy-type">政策类型</label>
+                  <select id="policy-type" className="policy-select" value={ptype} onChange={(e)=>setPtype(e.target.value)}>
+                    <option value="" disabled>选择类型</option>
+                    {POLICY_TYPES.map(opt=> <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                </div>
               </div>
-              <div className="filter-group">
-                <label htmlFor="policy-crop">作物种类</label>
-                <select id="policy-crop" className="policy-select" value={crop} onChange={(e)=>setCrop(e.target.value)}>
-                  <option value="" disabled>选择作物</option>
-                  {CROP_OPTIONS.map(opt=> <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-              </div>
-              <div className="filter-group">
-                <label htmlFor="policy-type">政策类型</label>
-                <select id="policy-type" className="policy-select" value={ptype} onChange={(e)=>setPtype(e.target.value)}>
-                  <option value="" disabled>选择类型</option>
-                  {POLICY_TYPES.map(opt=> <option key={opt} value={opt}>{opt}</option>)}
-                </select>
-              </div>
-              <div className="filter-group" style={{ flex: 1 }}>
-                <label htmlFor="policy-keyword">政策关键词</label>
-                <input id="policy-keyword" type="text" className="policy-select" placeholder="输入关键词" value={keyword} onChange={(e)=>setKeyword(e.target.value)} />
-              </div>
-              <div className="policy-actions">
-                <button className="search-button">搜索</button>
+
+              <div className="policy-filter-right" style={{ flex: 1 }}>
+                <div className="input-with-icon" style={{ flex: 1 }}>
+                  <input id="policy-keyword" type="text" className="policy-select" placeholder="输入关键词" value={keyword} onChange={(e)=>setKeyword(e.target.value)} />
+                </div>
               </div>
             </div>
 
