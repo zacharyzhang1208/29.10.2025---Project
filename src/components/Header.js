@@ -10,7 +10,7 @@ function Header() {
           <li><Link to="/prediction">价格预测</Link></li>
           <li><Link to="/policy">政策建议</Link></li>
         </ul>
-        <div className="nav-title">惠普农业</div>
+        <div className="nav-title">农研智析</div>
       </nav>
     </header>
   );
